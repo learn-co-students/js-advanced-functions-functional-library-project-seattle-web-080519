@@ -123,22 +123,6 @@ const fi = (function() {
     },
 
     flatten: function(array, shallow = false, flattenedArray = []) {
-      //   let newArray = [];
-      //   if (!Array.isArray(array)) {
-      //     return newArray.push(array);
-      //   }
-      //   if (shallow) {
-      //     for (let value of array) {
-      //       Array.isArray(value) ? newArray.push(array[0]) : newArray.push(value);
-      //     }
-      //   } else {
-      //     for (let value of array) {
-      //       this.flatten(value, false);
-      //     }
-      //   }
-      //   console.log(array);
-      //   console.log(newArray);
-      //   return newArray;
       if (shallow) {
         for (let i = 0; i < array.length; i++) {
           if (Array.isArray(array[i])) {
@@ -158,7 +142,6 @@ const fi = (function() {
           }
         }
       }
-      console.log(flattenedArray);
       return flattenedArray;
     },
 
