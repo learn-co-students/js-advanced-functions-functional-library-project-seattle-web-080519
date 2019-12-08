@@ -122,50 +122,99 @@ const fi = (function() {
       return finalArray;
     },
 
-    flatten: function(array, bool = false) {
-      let newArray = [];
-      if (!Array.isArray(array)) {
-        return newArray.push(array);
-      }
-      if (bool) {
-        for (let value of array) {
-          Array.isArray(value) ? newArray.push(array[0]) : newArray.push(value);
+    flatten: function(array, shallow = false, flattenedArray = []) {
+      //   let newArray = [];
+      //   if (!Array.isArray(array)) {
+      //     return newArray.push(array);
+      //   }
+      //   if (shallow) {
+      //     for (let value of array) {
+      //       Array.isArray(value) ? newArray.push(array[0]) : newArray.push(value);
+      //     }
+      //   } else {
+      //     for (let value of array) {
+      //       this.flatten(value, false);
+      //     }
+      //   }
+      //   console.log(array);
+      //   console.log(newArray);
+      //   return newArray;
+      if (shallow) {
+        for (let i = 0; i < array.length; i++) {
+          if (Array.isArray(array[i])) {
+            for (let j = 0; j < array[i].length; j++) {
+              flattenedArray.push(array[i][j]);
+            }
+          } else {
+            flattenedArray.push(array[i]);
+          }
         }
       } else {
-        for (let value of array) {
-          this.flatten(value, false);
+        for (let item of array) {
+          if (Array.isArray(item)) {
+            this.flatten(item, false, flattenedArray);
+          } else {
+            flattenedArray.push(item);
+          }
         }
       }
-      console.log(array);
-      console.log(newArray);
-      return newArray;
+      console.log(flattenedArray);
+      return flattenedArray;
     },
 
-    uniq: function(array, isSorted, callback = false) {
-      let finalArray = [];
+    uniq: function(array, isSorted = false, callback = false) {
+      let finalArray;
       if (isSorted) {
-        for (let i = 0; i < array.length; i++) {
-          if (!finalArray.includes(array[i])) {
+        finalArray = [array[0]];
+        for (let i = 1; i < array.length; i++) {
+          if (finalArray[i - 1] !== array[i]) {
             finalArray.push(callback(array[i]));
           }
         }
       } else if (!callback) {
-        return Array.from(new Set(collection));
+        return Array.from(new Set(array));
       } else {
         let newArray = array.sort(function(a, b) {
           return callback(a) - callback(b);
         });
-        for (let i = 0; i < newArray.length; i++) {
-          if (finalArray.some(newArray[i])) {
-            finalArray.push(callback(newArray[i]));
+        let modifiedArray = [];
+        finalArray = [];
+        for (let item of newArray) {
+          const modifiedValue = callback(item);
+          if (!modifiedArray.includes(modifiedValue)) {
+            modifiedArray.push(modifiedValue);
+            finalArray.push(item);
           }
         }
       }
-      console.log(finalArray);
-      return finalArray;
+      return finalArray.sort((a, b) => a - b);
     },
 
-    functions: function() {}
+    keys: function(object) {
+      let keysArray = [];
+      for (let i in object) {
+        keysArray.push(i);
+      }
+      return keysArray;
+    },
+
+    values: function(object) {
+      let valuesArray = [];
+      for (let i in object) {
+        valuesArray.push(object[i]);
+      }
+      return valuesArray;
+    },
+
+    functions: function(object) {
+      let functionsArray = [];
+      for (let i in object) {
+        if (typeof object[i] === "function") {
+          functionsArray.push(object[i]);
+        }
+      }
+      return functionsArray;
+    }
   };
 })();
 
